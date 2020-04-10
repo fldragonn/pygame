@@ -3,10 +3,12 @@
 
 import pygame
 
+# pygame 초기화
 pygame.init()
 width, height = 640, 480
 screen = pygame.display.set_mode((width, height))
 
+# 이미지 불러오기
 player = pygame.image.load("resources/images/dude.png")
 
 while True:
