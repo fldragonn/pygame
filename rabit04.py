@@ -1,7 +1,7 @@
 # raywenderich.org tutorial
 # https://www.raywenderlich.com/2795-beginning-game-programming-for-teens-with-python
 
-import pygame
+import pygame, math
 
 # 파이게임 초기화
 pygame.init()
@@ -29,7 +29,14 @@ while True:
     for cy in range(height // castle.get_height()):
         screen.blit(castle, (0, 30 + cy * castle.get_height()))
 
-    screen.blit(player, playpos)
+    # screen.blit(player, playpos)
+
+    position = pygame.mouse.get_pos()
+    angle = math.atan2(position[1]-(playpos[1] + player.get_width() // 2),
+                       position[0]-(playpos[0] + player.get_height() // 2))
+    playrot = pygame.transform.rotate(player, 360 - math.degrees(angle))
+    playpos1 = (playpos[0]-playrot.get_rect().width//2, playpos[1]-playrot.get_rect().height//2)
+    screen.blit(playrot, playpos1)
 
     pygame.display.flip()
 
