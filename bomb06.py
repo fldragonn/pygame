@@ -51,6 +51,12 @@ while True:
     elif player_pos.left + player_img.get_width() > SCREEN_WIDTH:
         player_pos.left -= 5
 
+    # 폭탄 좌표 변경
+    for tmp_pos in bombs_pos:
+        tmp_pos.top += 5
+        if tmp_pos.top > SCREEN_HEIGHT:
+            tmp_pos.top = -100
+
     # 이미지 화면 출력
     screen.blit(player_img, player_pos)
     for tmp_pos in bombs_pos:
