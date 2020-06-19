@@ -183,6 +183,9 @@ def main():
 
     clock = pygame.time.Clock()
 
+    lost = False
+    lost_count = 0
+
     # 화면 갱신
     def redraw_window():
         WIN.blit(bg_img, (0, 0))
@@ -202,6 +205,16 @@ def main():
     while run:
         clock.tick(FPS)
         redraw_window()
+
+        if lives <= 0 or player.health <= 0:
+            lost = True
+            lost_count += 1
+
+        if lost:
+            if lost_count > FPS * 3:
+                run = False
+            else:
+                continue
 
         if len(enemies) == 0:
             wave_length += 5
@@ -242,4 +255,5 @@ def main():
                 enemies.remove(enemy)
 
         player.move_lasers(-laser_vel, enemies)
+
 main()
