@@ -24,7 +24,7 @@ player_xpos = screen_width / 2 - player_width / 2
 player_ypos = screen_height - player_height
 
 # 이동할 좌표
-player_speed = 5;
+player_speed = 10;
 to_x = 0
 to_y = 0
 
@@ -37,15 +37,15 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                to_x += player_speed
-            elif event.key == pygame.K_RIGHT:
                 to_x -= player_speed
+            elif event.key == pygame.K_RIGHT:
+                to_x += player_speed
             elif event.key == pygame.K_UP:
-                to_y += player_speed
-            elif event.key == pygame.K_DOWN:
                 to_y -= player_speed
+            elif event.key == pygame.K_DOWN:
+                to_y += player_speed
 
-        if event.type == pygame.KEYUP:
+        elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 to_x = 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
@@ -58,7 +58,6 @@ while running:
             player_xpos = 0
         elif player_xpos > screen_width - player_width:
             player_xpos = screen_width - player_width
-
         if player_ypos < 0:
             player_ypos = 0
         elif player_ypos > screen_width - player_height:
