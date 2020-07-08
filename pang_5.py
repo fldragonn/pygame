@@ -27,24 +27,34 @@ player_xpos = screen_width / 2 - player_width / 2
 player_ypos = screen_height - player_height
 
 # 이동할 좌표
-<<<<<<< HEAD
 player_speed = 0.6;
-=======
-player_speed = 1;
->>>>>>> origin/master
+
 to_x = 0
 to_y = 0
+
+# 공 (스프라이트) 불러오기
+enemy = pygame.image.load(os.path.join("pypang_img", "enemy.png"))
+enemy_size = enemy.get_rect().size
+enemy_width = enemy_size[0]
+enemy_height = enemy_size[1]
+enemy_xpos = screen_width / 2 - enemy_width / 2
+enemy_ypos = screen_height / 2 - enemy_height / 2
+
+# 폰트 정의
+game_font = pygame.font.Font(None, 40)
+
+# 총 시간
+total_time = 10
+
+# 시작 시간 정보
+start_ticks = pygame.time.get_ticks()
 
 # event loop
 running = True
 while running:
     dt = clock.tick(30)
 
-<<<<<<< HEAD
     # print("fps: " + str(clock.get_fps()))
-=======
-    print("fps: " + str(clock.get_fps()))
->>>>>>> origin/master
 
     # 1초당 100픽셀씩 이동 시
     # 10 fps: 1초에 10프레임 - 1번에 10만큼 이동: 10 * 10 = 100
@@ -64,17 +74,12 @@ while running:
             elif event.key == pygame.K_DOWN:
                 to_y += player_speed
 
-<<<<<<< HEAD
         if event.type == pygame.KEYUP:
-=======
-        elif event.type == pygame.KEYUP:
->>>>>>> origin/master
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 to_x = 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 to_y = 0
 
-<<<<<<< HEAD
     player_xpos += to_x * dt
     player_ypos += to_y * dt
 
@@ -86,31 +91,46 @@ while running:
         player_ypos = 0
     elif player_ypos > screen_height - player_height:
         player_ypos = screen_height - player_height
-=======
-        player_xpos += to_x * dt
-        player_ypos += to_y * dt
 
-        if player_xpos < 0:
-            player_xpos = 0
-        elif player_xpos > screen_width - player_width:
-            player_xpos = screen_width - player_width
-        if player_ypos < 0:
-            player_ypos = 0
-        elif player_ypos > screen_width - player_height:
-            player_ypos = screen_width - player_height
->>>>>>> origin/master
+    # 충돌 처리를 위한 정보 업데이트
+    player_rect = player.get_rect()
+    player_rect.left = player_xpos
+    player_rect.top = player_ypos
 
-# 배경 그리기
+    enemy_rect = enemy.get_rect()
+    enemy_rect.left = enemy_xpos
+    enemy_rect.top = enemy_ypos
+
+    # 충돌 처리
+    if player_rect.colliderect(enemy_rect):
+        print("충돌")
+        running = False
+
+    # 배경 그리기
     # screen.fill((0, 200, 255))
     screen.blit(background, (0, 0))
 
     # 캐릭터 그리기
     screen.blit(player, (player_xpos, player_ypos))
+
+    # 적 그리기
+    screen.blit(enemy, (enemy_xpos, enemy_ypos))
+
+    # 시간 경과 (ms을 second으로 변경)
+    elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000
+    timer = game_font.render(str(int(total_time - elapsed_time)), True, (255, 255, 255))
+    screen.blit(timer, (10, 10))
+
+    # 시간 종료 > 게임 종료
+    if total_time - elapsed_time < 0:
+        print("타임 아웃")
+        running = False
+
+    # 화면 다시그리기
     pygame.display.update()
 
+# 대기
+pygame.time.delay(2000)
+
 # pygame 종료
-<<<<<<< HEAD
 pygame.quit()
-=======
-pygame.quit()
->>>>>>> origin/master
