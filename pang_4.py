@@ -12,9 +12,6 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 # 화면 타이틀 설정
 pygame.display.set_caption("PyPang")
 
-# FPS
-clock = pygame.time.Clock()
-
 # 배경 이미지 설정하기
 background = pygame.image.load(os.path.join("pypang_img", "bg_img.png"))
 
@@ -27,29 +24,13 @@ player_xpos = screen_width / 2 - player_width / 2
 player_ypos = screen_height - player_height
 
 # 이동할 좌표
-<<<<<<< HEAD
-player_speed = 0.6;
-=======
-player_speed = 1;
->>>>>>> origin/master
+player_speed = 10;
 to_x = 0
 to_y = 0
 
 # event loop
 running = True
 while running:
-    dt = clock.tick(30)
-
-<<<<<<< HEAD
-    # print("fps: " + str(clock.get_fps()))
-=======
-    print("fps: " + str(clock.get_fps()))
->>>>>>> origin/master
-
-    # 1초당 100픽셀씩 이동 시
-    # 10 fps: 1초에 10프레임 - 1번에 10만큼 이동: 10 * 10 = 100
-    # 20 fps: 1초에 20프레임 - 1번에 5만큼 이동: 20 * 5 = 100
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -64,31 +45,14 @@ while running:
             elif event.key == pygame.K_DOWN:
                 to_y += player_speed
 
-<<<<<<< HEAD
-        if event.type == pygame.KEYUP:
-=======
         elif event.type == pygame.KEYUP:
->>>>>>> origin/master
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 to_x = 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 to_y = 0
 
-<<<<<<< HEAD
-    player_xpos += to_x * dt
-    player_ypos += to_y * dt
-
-    if player_xpos < 0:
-        player_xpos = 0
-    elif player_xpos > screen_width - player_width:
-        player_xpos = screen_width - player_width
-    if player_ypos < 0:
-        player_ypos = 0
-    elif player_ypos > screen_height - player_height:
-        player_ypos = screen_height - player_height
-=======
-        player_xpos += to_x * dt
-        player_ypos += to_y * dt
+        player_xpos += to_x
+        player_ypos += to_y
 
         if player_xpos < 0:
             player_xpos = 0
@@ -98,7 +62,6 @@ while running:
             player_ypos = 0
         elif player_ypos > screen_width - player_height:
             player_ypos = screen_width - player_height
->>>>>>> origin/master
 
 # 배경 그리기
     # screen.fill((0, 200, 255))
@@ -109,8 +72,4 @@ while running:
     pygame.display.update()
 
 # pygame 종료
-<<<<<<< HEAD
 pygame.quit()
-=======
-pygame.quit()
->>>>>>> origin/master
