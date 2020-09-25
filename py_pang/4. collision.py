@@ -27,6 +27,10 @@ character = pygame.image.load(os.path.join(img_path, "character.png"))
 character_size = character.get_rect().size
 character_width = character_size[0]
 character_height = character_size[1]
+character_x_pos = screen_width / 2 - character_width / 2
+character_y_pos = screen_height - stage_height - character_height
+character_to_x = 0
+character_speed = 5
 
 running = True
 
@@ -35,11 +39,23 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        # 키 입력 처리
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                character_to_x -= character_speed
+            if event.key == pygame.K_RIGHT:
+                character_to_x += character_speed
+
+        if event.type == pygame.KEYUP:
+            character_to_x = 0
+
+    # 캐릭터 위치 업데이트
+    character_x_pos += character_to_x
+
     # 화면그리기
     screen.blit(background, (0, 0))
     screen.blit(stage, (0, screen_height - stage_height))
-    screen.blit(character, (screen_width / 2 - character_width / 2,
-                            screen_height - stage_height - character_height))
+    screen.blit(character, (character_x_pos, character_y_pos))
     pygame.display.update()
 
 pygame.quit()
