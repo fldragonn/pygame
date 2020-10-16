@@ -168,7 +168,7 @@ while running:
         screen.blit(weapon, (one[0], one[1]))
 
     screen.blit(stage, (0, screen_height - stage_height))
-    screen.blit(character, (character_x_pos, character_y _pos))
+    screen.blit(character, (character_x_pos, character_y_pos))
 
     for idx, val in enumerate(balls):
         ball_pos_x = val["pos_x"]
