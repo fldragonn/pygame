@@ -56,15 +56,18 @@ ball_img = [
 
 ball_speed_y = [-18, -15, -12, -9]
 
-balls = []
-balls.append({
-    'pos_x' : 50,
-    'pos_y' : 50,
-    'to_x' : 3,
-    'to_y' : -6,
-    'img_idx' : 0,
-    'init_spd_y' : ball_speed_y[0]
-})
+balls = [{
+    'pos_x': 50,
+    'pos_y': 50,
+    'to_x': 3,
+    'to_y': -6,
+    'img_idx': 0,
+    'init_spd_y': ball_speed_y[0]
+}]
+
+# 사라질 공, 무기 인덱스
+remove_weapon_idx = -1
+remove_ball_idx = -1
 
 # 게임 루프
 running = True
@@ -110,6 +113,41 @@ while running:
         cur_ball['pos_x'] += cur_ball['to_x']
         cur_ball['pos_y'] += cur_ball['to_y']
 
+    # 충돌 처리
+    for idx_ball, one_ball in enumerate(balls):
+        one_ball_rect = ball_img[one_ball['img_idx']].get_rect()
+        one_ball_rect.top =one_ball['pos_y']
+        one_ball_rect.left = one_ball['pos_x']
+
+        character_rect = character_img.get_rect()
+        character_rect.top = character_pos_y
+        character_rect.left = character_pos_x
+
+        # 공과 캐릭터 충돌 처리
+        if one_ball_rect.colliderect(character_rect):
+            running = False
+            print("DEAD")
+
+        # 무기와 공 출동 처리
+        for idx_weapon, one_weapon in enumerate(weapons):
+            one_weapon_rect = weapon_img.get_rect()
+            one_weapon_rect.top = one_weapon[1]
+            one_weapon_rect.left = one_weapon[0]
+            if one_ball_rect.colliderect(one_weapon_rect):
+                remove_ball_idx = idx_ball
+                remove_weapon_idx = idx_weapon
+                break
+                print("HIT!")
+
+        # 충돌 객체 지우기
+        if remove_ball_idx > -1:
+            del balls[remove_ball_idx]
+            remove_ball_idx = -1
+        if remove_weapon_idx > -1:
+            del weapons[remove_weapon_idx]
+            remove_weapon_idx = -1
+
+    # 화면 그리기
     screen.blit(background_img, (0, 0))
     for one in weapons:
         screen.blit(weapon_img, (one[0], one[1]))
