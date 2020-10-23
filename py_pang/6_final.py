@@ -81,6 +81,7 @@ while running:
                 character_speed -= 5
             elif event.key == pygame.K_RIGHT:
                 character_speed += 5
+            # elif event.key == pygame.K_SPACE and len(weapons) < 1:
             elif event.key == pygame.K_SPACE:
                 weapon_pos_x = character_pos_x + character_width // 2 - weapon_width // 2
                 weapon_pos_y = character_pos_y
@@ -123,10 +124,10 @@ while running:
         character_rect.top = character_pos_y
         character_rect.left = character_pos_x
 
-        # 공과 캐릭터 충돌 처리
+        # 공과 캐릭터 충돌 처
         if one_ball_rect.colliderect(character_rect):
             running = False
-            print("DEAD")
+            # print("DEAD")
 
         # 무기와 공 출동 처리
         for idx_weapon, one_weapon in enumerate(weapons):
@@ -136,8 +137,32 @@ while running:
             if one_ball_rect.colliderect(one_weapon_rect):
                 remove_ball_idx = idx_ball
                 remove_weapon_idx = idx_weapon
+                if one_ball['img_idx'] < 3:
+                    one_ball_width = one_ball_rect.size[0]
+                    one_ball_height = one_ball_rect.size[1]
+
+                    small_ball_rect = ball_img[one_ball['img_idx']].get_rect().size
+                    small_ball_width = small_ball_rect[0]
+                    small_ball_height = small_ball_rect[1]
+
+                    balls.append({
+                        "pos_x": one_ball['pos_x'] + one_ball_width // 2 - small_ball_width // 2,
+                        "pos_y": one_ball['pos_y'] + one_ball_height // 2 - small_ball_height // 2,
+                        "img_idx": one_ball['img_idx'] + 1,
+                        "to_x": 3,
+                        "to_y": -6,
+                        "init_spd_y": ball_speed_y[one_ball['img_idx'] + 1]
+                    })
+                    balls.append({
+                        "pos_x": one_ball['pos_x'] + one_ball_width // 2 - small_ball_width // 2,
+                        "pos_y": one_ball['pos_y'] + one_ball_height // 2 - small_ball_height // 2,
+                        "img_idx": one_ball['img_idx'] + 1,
+                        "to_x": -3,
+                        "to_y": -6,
+                        "init_spd_y": ball_speed_y[one_ball['img_idx'] + 1]
+                    })
                 break
-                print("HIT!")
+                # print("HIT!")
 
         # 충돌 객체 지우기
         if remove_ball_idx > -1:
