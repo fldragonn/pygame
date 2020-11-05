@@ -23,6 +23,9 @@ FPSCLOCK = pygame.time.Clock()
 
 # 메인 루프
 def main():
+    # 기본 설정
+    game_over = False
+
     # 맵 정보 리스트 초기화
     field = [[EMPTY for xpos in range(WIDTH)] for ypos in range(HEIGHT)]
 
@@ -40,7 +43,15 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                xpos, ypos = floor(event.pos[0] / SIZE), floor(event.pos[1] / SIZE)
+                # click 타일 효과
+                # rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
+                # pygame.draw.rect(SURFACE, (92, 92, 92), rect)
+                # pygame.display.update()
+                # pygame.time.delay(100)
+                if field[ypos][xpos] == BOMB:
+                    game_over = True
 
         # 배경 그리기
         SURFACE.fill( (0, 0, 0) )
@@ -52,7 +63,7 @@ def main():
 
                 if tile == EMPTY or tile == BOMB:
                     pygame.draw.rect(SURFACE, (192, 192, 192), rect)
-                    if tile == BOMB:
+                    if game_over and tile == BOMB:
                         pygame.draw.ellipse(SURFACE, (255, 255, 0), rect)
 
         # 선 그리기
