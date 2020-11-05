@@ -23,6 +23,17 @@ FPSCLOCK = pygame.time.Clock()
 
 # 메인 루프
 def main():
+    # 맵 정보 리스트 초기화
+    field = [[EMPTY for xpos in range(WIDTH)] for ypos in range(HEIGHT)]
+
+    # 폭탄 설치하기
+    count = 0
+    while count < NUM_OF_BOMBS:
+        xpos, ypos = randint(0, WIDTH - 1), randint(0, HEIGHT - 1)
+        if field[ypos][xpos] == EMPTY:
+            field[ypos][xpos] = BOMB
+            count += 1
+    # print(field)
 
     while True:
         for event in pygame.event.get():
@@ -30,8 +41,19 @@ def main():
                 pygame.quit()
                 sys.exit()
 
+
         # 배경 그리기
         SURFACE.fill( (0, 0, 0) )
+
+        for ypos in range(HEIGHT):
+            for xpos in range(WIDTH):
+                tile = field[ypos][xpos]
+                rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
+
+                if tile == EMPTY or tile == BOMB:
+                    pygame.draw.rect(SURFACE, (192, 192, 192), rect)
+                    if tile == BOMB:
+                        pygame.draw.ellipse(SURFACE, (255, 255, 0), rect)
 
         # 선 그리기
         for index in range(0, WIDTH * SIZE, SIZE):
