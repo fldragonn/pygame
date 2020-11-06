@@ -81,10 +81,10 @@ def main():
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 xpos, ypos = floor(event.pos[0] / SIZE), floor(event.pos[1] / SIZE)
                 # click 타일 효과
-                # rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
-                # pygame.draw.rect(SURFACE, (92, 92, 92), rect)
-                # pygame.display.update()
-                # pygame.time.delay(100)
+                rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
+                pygame.draw.rect(SURFACE, (92, 92, 92), rect)
+                pygame.display.update()
+                pygame.time.delay(100)
                 if field[ypos][xpos] == BOMB:
                     game_over = True
                 else:
