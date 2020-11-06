@@ -50,6 +50,7 @@ def open_tile(field, x_pos, y_pos):
                 if count == 0 and not (xpos == x_pos and ypos == y_pos):
                     open_tile(field, xpos, ypos)
 
+
 # 메인 루프
 def main():
     # 기본 설정
@@ -78,18 +79,25 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == MOUSEBUTTONDOWN:
+                # 1: left click
+                # 2: middle click
+                # 3: right click
+                # 4: scroll up
+                # 5: scroll down
                 xpos, ypos = floor(event.pos[0] / SIZE), floor(event.pos[1] / SIZE)
+
                 # click 타일 효과
                 rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
                 pygame.draw.rect(SURFACE, (92, 92, 92), rect)
                 pygame.display.update()
                 pygame.time.delay(100)
-                if field[ypos][xpos] == BOMB:
-                    game_over = True
-                else:
-                # elif field[ypos][xpos] == EMPTY:
-                    open_tile(field, xpos, ypos)
+
+                if event.button == 1:
+                    if field[ypos][xpos] == BOMB:
+                        game_over = True
+                    elif field[ypos][xpos] == EMPTY:
+                        open_tile(field, xpos, ypos)
 
         # 배경 그리기
         SURFACE.fill( (0, 0, 0) )
