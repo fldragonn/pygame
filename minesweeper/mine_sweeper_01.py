@@ -55,6 +55,11 @@ def main():
     # 기본 설정
     game_over = False
     smallfont = pygame.font.SysFont(None, 36)
+    largefont = pygame.font.SysFont(None, 72)
+    message_clear = largefont.render("!!CLEARED!!", True, (0, 255, 255))
+    message_over = largefont.render("GAME OVER!!", True, (0, 255, 255))
+    message_rect = message_clear.get_rect()
+    message_rect.center = (WIDTH * SIZE / 2, HEIGHT * SIZE / 2)
 
     # 맵 정보 리스트 초기화
     field = [[EMPTY for xpos in range(WIDTH)] for ypos in range(HEIGHT)]
@@ -110,6 +115,12 @@ def main():
 
         for index in range(0, HEIGHT * SIZE, SIZE):
             pygame.draw.line(SURFACE, (96, 96, 96), (0, index), (WIDTH * SIZE, index))
+
+        # 메시지 나타내기
+        if OPEN_COUNT == WIDTH * HEIGHT - NUM_OF_BOMBS:
+            SURFACE.blit(message_clear, message_rect.topleft)
+        elif game_over:
+            SURFACE.blit(message_over, message_rect.topleft)
 
         # 화면 업데이트
         pygame.display.update()
