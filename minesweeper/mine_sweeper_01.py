@@ -21,10 +21,40 @@ pygame.init()
 SURFACE = pygame.display.set_mode([WIDTH * SIZE, HEIGHT * SIZE])
 FPSCLOCK = pygame.time.Clock()
 
+# 폭탄 개수 반환
+def num_of_bomb(field, x_pos, y_pos):
+    count = 0
+    for yoffset in range(-1, 2):
+        for xoffset in range(-1, 2):
+            xpos, ypos = (x_pos + xoffset, y_pos + yoffset)
+            if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and field[ypos][xpos] == BOMB:
+                count += 1
+    return count
+
+
+# 타일 오픈
+def open_tile(field, x_pos, y_pos):
+    global OPEN_COUNT
+    if CHECKED[y_pos][x_pos]:
+        return
+
+    CHECKED[y_pos][x_pos] = True
+
+    for yoffset in range(-1, 2):
+        for xoffset in range(-1, 2):
+            xpos, ypos = (x_pos + xoffset, y_pos + yoffset)
+            if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and field[ypos][xpos] == EMPTY:
+                field[ypos][xpos] = OPENED
+                OPEN_COUNT += 1
+                count = num_of_bomb(field, xpos, ypos)
+                if count == 0 and not (xpos == x_pos and ypos == y_pos):
+                    open_tile(field, xpos, ypos)
+
 # 메인 루프
 def main():
     # 기본 설정
     game_over = False
+    smallfont = pygame.font.SysFont(None, 36)
 
     # 맵 정보 리스트 초기화
     field = [[EMPTY for xpos in range(WIDTH)] for ypos in range(HEIGHT)]
@@ -52,6 +82,9 @@ def main():
                 # pygame.time.delay(100)
                 if field[ypos][xpos] == BOMB:
                     game_over = True
+                else:
+                # elif field[ypos][xpos] == EMPTY:
+                    open_tile(field, xpos, ypos)
 
         # 배경 그리기
         SURFACE.fill( (0, 0, 0) )
@@ -65,6 +98,11 @@ def main():
                     pygame.draw.rect(SURFACE, (192, 192, 192), rect)
                     if game_over and tile == BOMB:
                         pygame.draw.ellipse(SURFACE, (255, 255, 0), rect)
+                elif tile == OPENED:
+                    count = num_of_bomb(field, xpos, ypos)
+                    if count > 0:
+                        num_image = smallfont.render("{}".format(count), True, (255, 255, 0))
+                        SURFACE.blit(num_image, (xpos * SIZE + 10, ypos * SIZE + 10))
 
         # 선 그리기
         for index in range(0, WIDTH * SIZE, SIZE):
